@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+    <plugin>
+        <name lang="ru">Выключение www-доменов с правами Андмина</name>
+        <name lang="en">This plugin allows to enable and disable each WWW domain with Admin perms only</name>
+        <description lang="ru">Плагин позволяет выключать и включать www-домены только с правами Админа.
+        В разделе www-доменов добавляются 2 кнопки: выключить и включить домен,
+        выделите нужные домены и нажмите на соответствующую кнопку. Домены блокируются в nginx.</description>
+        <version>0.1</version>
+        <lang>python</lang>
+        <langver strict="yes">2.5</langver>
+        <langver strict="yes">2.6</langver>
+        <langver strict="yes">2.7</langver>
+        <manager>ispmgr</manager>
+        <author>Andrey Scopenco / andrey@scopenco.net</author>
+        <contact>Email:andrey@scopenco.net</contact>
+    </plugin>
+
+    <handler name="wwwdomain_on_off_e.py" type="xml">
+        <event after="yes">wwwdomain</event>
+    </handler>
+
+    <handler name="wwwdomain_on_off_f.py" type="xml">
+        <func minlevel="7">wwwdomain_on_off.enable</func>
+        <func minlevel="7">wwwdomain_on_off.disable</func>
+    </handler>
+
+    <metadata name="wwwdomain" type="list" key="name">
+        <toolbar>
+            <toolsep/>
+            <toolbtn func="wwwdomain_on_off.enable" type="group" img="t-on" name="adminenable" level="7" />
+            <toolbtn func="wwwdomain_on_off.disable" type="group" img="t-off" name="admindisable" level="7" />
+        </toolbar>
+
+        <coldata>
+            <col name="onoffprops" sort="prop">
+                <prop name="active" onimg="p-on" defimg="p-off" stat="yes"/>
+            </col>
+        </coldata>
+    </metadata>
+
+    <lang name="en">
+        <messages name="wwwdomain">
+            <msg name="hint_admindisable">Disable the selected WWW domain by Admin</msg>
+            <msg name="hint_adminenable">Enable the selected WWW domain by Admin</msg>
+            <msg name="short_admindisable">DisableAdm</msg>
+            <msg name="short_adminenable">EnableAdm</msg>
+            <msg name="hint_p_active">Active</msg>
+            <msg name="hint_p_def_active">Disabled</msg>
+            <msg name="msg_wwwdomain_on_off_disable">Do you really want to disable</msg>
+            <msg name="msg_wwwdomain_on_off_enable">Do you really want to enable</msg>
+            <msg name="onoffprops">Status</msg>
+        </messages>
+    </lang>
+    <lang name="ru"> 
+        <messages name="wwwdomain">
+            <msg name="hint_adminenable">Включить выбранный домен под правами Админа</msg>
+            <msg name="hint_admindisable">Отключить выбранный домен под правами Админа</msg>
+            <msg name="short_admindisable">Выкл. Адм.</msg>
+            <msg name="short_adminenable">Вкл. Адм.</msg>
+            <msg name="hint_p_active">Активен под правами Админа</msg>
+            <msg name="hint_p_def_active">Отключен под правами Админа</msg>
+            <msg name="msg_wwwdomain_on_off_disable">Вы действительно хотите отключить</msg>
+            <msg name="msg_wwwdomain_on_off_enable">Вы действительно хотите включить</msg>
+            <msg name="onoffprops">Статус</msg>
+        </messages>
+    </lang>
+</mgrdata>
