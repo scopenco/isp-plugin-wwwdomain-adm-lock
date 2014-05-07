@@ -1,11 +1,11 @@
-isp-plugin-wwwdomain-on-off
+isp-plugin-wwwdomain-adm-lock
 ===========================
 
 Documentation
 --------
-Russian description at http://blog.scopenco.net/wwwdomain-on-off-ispmanager/
+Russian description at http://blog.scopenco.net/wwwdomain-adm-lock-ispmanager/
 
-ISPmanager plugin allow to block/unblock wwwdomain with admin (level 7) permissions. After block, User can't unblock wwwdomain and gets error. The main goal of this plugins is to allow to block domain without block User in some situation like DDOS atack / overloading / abuse.
+ISPmanager plugin allows lock/unlock www domain with admin (level 7) permissions. After lock, User will see forbidden page or page you selected for lock state. The main goal of this plugin is to allow to lock domain without locking all User's domains in situations like DDOS atack / overloading / abuse.
 
 
 Installing
