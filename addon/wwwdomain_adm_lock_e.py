@@ -23,8 +23,8 @@ except ImportError:
         print "Failed to import ElementTree from any known place"
 
 
-PLUGIN_NAME = 'wwwdomain_on_off_e'
-INC = '/usr/local/ispmgr/etc/wwwdomain_on_off.inc'
+PLUGIN_NAME = 'wwwdomain_adm_lock_e'
+INC = '/usr/local/ispmgr/etc/wwwdomain_adm_lock.inc'
 
 
 def add_inc():

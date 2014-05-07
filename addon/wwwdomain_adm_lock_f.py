@@ -24,8 +24,8 @@ except ImportError:
 
 
 # configs
-PLUGIN_NAME = 'wwwdomain_on_off_f'
-INC = '/usr/local/ispmgr/etc/wwwdomain_on_off.inc'
+PLUGIN_NAME = 'wwwdomain_adm_lock_f'
+INC = '/usr/local/ispmgr/etc/wwwdomain_adm_lock.inc'
 LOCK_TEMPLATE = '''# domain %s\n\
 server {\n\
 \tlisten %s:80;\n\
@@ -79,41 +79,34 @@ def wrap(action):
             do_nginx_reload = False
 
             for elid in ellist.encode('utf-8').split(', '):
-                # get owner to check permissions
+                # get credentials for domain
                 doc = mgr_query('wwwdomain.edit', [['elid', elid]])
                 xmldoc = etree.parse(StringIO(doc))
-                owner = xmldoc.find('owner').text
                 domain = xmldoc.find('domain').text
                 alias = xmldoc.find('alias').text
                 ip = xmldoc.find('ip').text
-                level = args[0]
-                user = args[1]
 
-                if level == '7' or user == owner:
-                    # convert domain and aliases to idna
-                    domains = [domain, ]
-                    if alias:
-                        domains.append(alias)
+                # convert domain and aliases to idna
+                domains = [domain, ]
+                if alias:
+                    domains.append(alias)
 
-                    # convert domains to idna
-                    domains_idna = []
-                    for d in domains:
-                        domains_idna.append(domain_to_idna(d.encode('utf-8')))
-                    domains = ' '.join(domains_idna)
+                # convert domains to idna
+                domains_idna = []
+                for d in domains:
+                    domains_idna.append(domain_to_idna(d.encode('utf-8')))
+                domains = ' '.join(domains_idna)
 
-                    # disable/enable domains
-                    res = action(domains, ip, *args, **kwargs)
-                    if res == 0:
-                        do_nginx_reload = True
-                    if res == 1:
-                        print xml_error('access to inc file problem',
-                                        code_num='1')
-                        return 0
-                    if res == 2:
-                        log.write('nothing to do')
-                else:
-                    print xml_error('access denied', code_num='1')
+                # disable/enable domains
+                res = action(domains, ip, *args, **kwargs)
+                if res == 0:
+                    do_nginx_reload = True
+                if res == 1:
+                    print xml_error('access to inc file problem',
+                                    code_num='1')
                     return 0
+                if res == 2:
+                    log.write('nothing to do')
 
             print xml_doc('ok')
             if do_nginx_reload:
@@ -126,7 +119,7 @@ def wrap(action):
 
 
 @wrap
-def turn_off_www(domains, ip, level, user):
+def turn_off_www(domains, ip):
     '''Disable domain by adding section to INC'''
 
     log.write('try to disable domain(s) %s with ip %s' % (domains, ip))
@@ -157,7 +150,7 @@ def turn_off_www(domains, ip, level, user):
 
 
 @wrap
-def turn_on_www(domains, ip, level, user):
+def turn_on_www(domains, ip):
     '''Enable domain by removing section to INC'''
 
     log.write('try to enable domain(s) %s with ip %s' % (domains, ip))
@@ -198,15 +191,19 @@ if __name__ == '__main__':
     try:
         log.write('start plugin')
         xmldoc = etree.parse(stdin).getroot()
-        level, user = xmldoc.get('level'), xmldoc.get('user')
+        level = int(xmldoc.get('level'))
         params = xmldoc.find('params')
         func = params.find('func').text
-        log.write('user %s, level %s, func %s' % (user, level, func))
+        log.write('level %s, func %s' % (level, func))
 
-        if func == 'wwwdomain_on_off.enable':
-            turn_on_www(level, user)
-        elif func == 'wwwdomain_on_off.disable':
-            turn_off_www(level, user)
+        if level != 7:
+            print xml_error('access denied', code_num='1')
+            raise ExitOk('done')
+
+        if func == 'wwwdomain_adm_lock.enable':
+            turn_on_www()
+        elif func == 'wwwdomain_adm_lock.disable':
+            turn_off_www()
 
         raise ExitOk('done')
 
