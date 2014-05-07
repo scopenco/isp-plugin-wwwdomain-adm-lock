@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+    <plugin>
+        <name lang="ru">Блокировка www-доменов под правами Администратора</name>
+        <name lang="en">This plugin allows to lock WWW domain with admin perms</name>
+        <description lang="ru">Плагин позволяет блокировать www-домены с правами Администратора. Клиент при этом не может разблокировать www-домены.
+        В разделе www-доменов добавляются 2 кнопки: вык.Адм. и вкл.Адм., выделите нужные домены и нажмите на соответствующую кнопку. Домены блокируются в nginx.</description>
+        <version>0.1</version>
+        <lang>python</lang>
+        <langver strict="yes">2.5</langver>
+        <langver strict="yes">2.6</langver>
+        <langver strict="yes">2.7</langver>
+        <manager>ispmgr</manager>
+        <author>Andrey Scopenco / andrey@scopenco.net</author>
+        <contact>Email:andrey@scopenco.net</contact>
+    </plugin>
+
+    <handler name="wwwdomain_adm_lock_e.py" type="xml">
+        <event after="yes">wwwdomain</event>
+    </handler>
+
+    <handler name="wwwdomain_adm_lock_f.py" type="xml">
+        <func minlevel="7">wwwdomain_adm_lock.enable</func>
+        <func minlevel="7">wwwdomain_adm_lock.disable</func>
+    </handler>
+
+    <metadata name="wwwdomain" type="list" key="name">
+        <toolbar>
+            <toolsep/>
+            <toolbtn func="wwwdomain_adm_lock.enable" type="group" img="t-on" name="adminenable" level="7" />
+            <toolbtn func="wwwdomain_adm_lock.disable" type="group" img="t-off" name="admindisable" level="7" />
+        </toolbar>
+
+        <coldata>
+            <col name="onoffprops" sort="prop">
+                <prop name="active" onimg="p-on" defimg="p-off" stat="yes"/>
+            </col>
+        </coldata>
+    </metadata>
+
+    <lang name="en">
+        <messages name="wwwdomain">
+            <msg name="hint_admindisable">Lock the selected WWW domain by Admin</msg>
+            <msg name="hint_adminenable">Unlock the selected WWW domain by Admin</msg>
+            <msg name="short_admindisable">LockAdm</msg>
+            <msg name="short_adminenable">UnockAdm</msg>
+            <msg name="hint_p_active">Active</msg>
+            <msg name="hint_p_def_active">Locked</msg>
+            <msg name="msg_wwwdomain_adm_lock_disable">Do you really want to lock</msg>
+            <msg name="msg_wwwdomain_adm_lock_enable">Do you really want to unlock</msg>
+            <msg name="onoffprops">Lock Status</msg>
+        </messages>
+    </lang>
+    <lang name="ru"> 
+        <messages name="wwwdomain">
+            <msg name="hint_admindisable">Заблокировать выбранный домен под правами Админа</msg>
+            <msg name="hint_adminenable">РазБлокировать выбранный домен под правами Админа</msg>
+            <msg name="short_admindisable">Выкл. Адм.</msg>
+            <msg name="short_adminenable">Вкл. Адм.</msg>
+            <msg name="hint_p_active">Активен</msg>
+            <msg name="hint_p_def_active">Блокирован под правами Админа</msg>
+            <msg name="msg_wwwdomain_adm_lock_disable">Вы действительно хотите заблокировать</msg>
+            <msg name="msg_wwwdomain_adm_lock_enable">Вы действительно хотите разблокировать</msg>
+            <msg name="onoffprops">Статус блокировки</msg>
+        </messages>
+    </lang>
+</mgrdata>
